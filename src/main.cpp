@@ -1,5 +1,6 @@
 #include "main.h"
 #include "gamepad/api.hpp"
+#include "gamepad/controller.hpp"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -14,7 +15,10 @@ void upRelease1() { printf("Up Release!\n"); }
 
 void leftLongPress1() { printf("Left Long Press!\n"); }
 
-void leftShortRelease1() { printf("Left Short Release!\n"); }
+void leftShortRelease1() {
+    printf("Left Short Release!\n");
+    Gamepad::master.add_alert(0, "this is urgent\n\n override all", 3000, "...");
+}
 
 void initialize() {
     // We can register functions to run when buttons are pressed
@@ -25,7 +29,7 @@ void initialize() {
     Gamepad::master.Left.onLongPress("leftLongPress1", leftLongPress1);
     // We can have two functions on one button,
     // just remember to give them different names
-    Gamepad::master.Left.onShortRelease("leftShortRelease", leftShortRelease1);
+    Gamepad::master.Left.onRelease("leftShortRelease", leftShortRelease1);
     // And we can use lambda's too
     Gamepad::master.X.onShortRelease("xShortRelease1", []() { printf("X Short Release!\n"); });
 }
@@ -81,6 +85,9 @@ void opcontrol() {
     while (true) {
         // Remember to ALWAYS call update at the start of your while loop!
         Gamepad::master.update();
+
+        Gamepad::master.print_line(0, "idk just smtn\nthis will show\nthis will not");
+
         // We'll use the arcade control scheme
         int dir = Gamepad::master.LeftY; // Gets amount forward/backward from left joystick
         int turn = Gamepad::master.RightX; // Gets the turn left/right from right joystick
