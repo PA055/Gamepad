@@ -21,3 +21,6 @@ temp.errors
 
 # MacOS
 .DS_Store
+
+# Windows
+debug.log
